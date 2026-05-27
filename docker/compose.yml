@@ -1,0 +1,37 @@
+services:
+  servidor:
+    build:
+      context: ..
+      dockerfile: Dockerfile
+    container_name: servidor
+    cap_add:
+      - NET_ADMIN
+    networks:
+      rede_teste:
+        ipv4_address: 10.0.0.2
+    command: tail -f /dev/null
+    volumes:
+      - ../logs:/app/logs
+      - ../capturas:/app/capturas
+
+  cliente:
+    build:
+      context: ..
+      dockerfile: Dockerfile
+    container_name: cliente
+    cap_add:
+      - NET_ADMIN
+    networks:
+      rede_teste:
+        ipv4_address: 10.0.0.3
+    command: tail -f /dev/null
+    volumes:
+      - ../logs:/app/logs
+      - ../capturas:/app/capturas
+
+networks:
+  rede_teste:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 10.0.0.0/24
